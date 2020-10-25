@@ -1,13 +1,15 @@
 const connection = require('../Database/connection');
+const brcryt = require('bcrypt');
 
 module.exports = {
     async add(request,response){
         const {email,senha,nome} = request.body;
+        const hash = await brcryt.hash(senha,6);
 
        try{
            await connection('users').insert({
                email,
-               senha,
+               senha:hash,
                nome
             })
         response.json(nome);
@@ -25,5 +27,10 @@ module.exports = {
         }catch(e){
             console.log(e);
         }
+    },
+
+    async auther(resquest,response){
+        
     }
+
 }
