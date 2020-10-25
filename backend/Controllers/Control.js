@@ -24,6 +24,6 @@ module.exports = {
             response.json(data)
         }catch(e){
             console.log(e);
-        }r
+        }
     }
 }
