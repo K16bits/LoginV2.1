@@ -5,30 +5,44 @@ import Main from '../../components/Main'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 
+import api from '../../services/api'
+
+
 export default function Homepage(){
 
-    const [nome,setnome] = useState('');
+    const [email,setnome] = useState('');
     const [senha,setsenha] = useState('');
-
 
     async function HandleRegister(e){
         e.preventDefault();
         const data = {
-            nome,
+            email,
             senha
         }
-        console.log(data);
+        console.log(data)
 
+        try{
+            const resposta = await api.post("/",data)
+           
+            if(resposta !== undefined){
+                alert(`Bem-vindo Sr. ${resposta.data}`)
+            }else{
+                alert("Email ou senha inválida")
+            }
+            
+        }catch(error){
+            console.log(error);
+        }
     }
 
     return(
         <Main>
             <Form onSubmit={HandleRegister}>
                 <Title>LOGIN</Title>
-                <Input name='user' placeholder='Usuario'
+                <Input value={email} placeholder='Usuario'
                     onChange= { e => setnome(e.target.value)}
                 ></Input>
-                <Input name='password' placeholder='Senha' type='password'
+                <Input value={senha} placeholder='Senha' type='password'
                     onChange = { e => setsenha(e.target.value) }
                 ></Input>
                 <Button type='submit' onSubmit={HandleRegister} >Entrar</Button>
