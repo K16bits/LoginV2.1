@@ -1,5 +1,7 @@
 const connection = require('../Database/connection');
 const brcryt = require('bcrypt');
+const jwt = require('jsonwebtoken')
+const secret = "AlgumaPalavraSecreta"
 
 module.exports = {
     async add(request,response){
@@ -12,7 +14,7 @@ module.exports = {
                senha:hash,
                nome
             })
-        response.json(nome);
+        return response.json({nome});
 
        }catch(e){
            console.log(e);
@@ -45,13 +47,26 @@ module.exports = {
 
     async autherticate(request, response){
         const {email,senha} = request.body;
-        const data = await connection('users').select("nome","senha").where({'email':email}).first()
-        const resposta = await brcryt.compare(senha,data['senha'])
-
-        if(resposta == true){
-            response.send("Logado");
-        }else{
-            response.send("Errou na senha");
+        
+        try{
+            const resposta = await connection('users').where("email",email).select("email","senha","nome").first()
+            
+            if(resposta != undefined){
+                return response.json(resposta.nome)
+            }
+        }catch(e){
+            console.log("Erro no banco "+ e)
         }
+
+        
+        // const resposta = await brcryt.compare(senha,data['senha'])
+
+        // if(resposta == true){
+        //     console.log("Senha correta")
+        //     const token = jwt.sign({email:email},secret)
+        //     return response.json({token})
+        // }else{
+        //     return response.send("Errou na senha");
+        // }
     }
 }
