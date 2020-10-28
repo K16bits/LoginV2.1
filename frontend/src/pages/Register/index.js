@@ -25,6 +25,7 @@ export default function Register(){
         try{
            const resposta =  await api.post("/user",data)
            alert(`Cadastro realizado Sr. ${resposta.data.nome}`)
+           
         }catch(e){
             console.log(e)
         }
