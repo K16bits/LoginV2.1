@@ -23,8 +23,8 @@ module.exports = {
 
     async list(request,response){
         try{
-            const data = await connection('users').select('*');
-            console.log(data);
+            const data = await connection('users').select("nome","email");
+            //console.log(data);
             response.json(data);
         }catch(e){
             console.log(e);
@@ -53,6 +53,8 @@ module.exports = {
             
             if(resposta != undefined){
                 return response.json(resposta.nome)
+            }else{
+                return resposta;
             }
         }catch(e){
             console.log("Erro no banco "+ e)
